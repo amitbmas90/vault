@@ -12,12 +12,12 @@ let LinkedBlockComponent = Component.extend({
   queryParams: null,
 
   click(event) {
-    const $target = this.$(event.target);
+    const $target = event.target;
     const isAnchorOrButton =
-      $target.is('a') ||
-      $target.is('button') ||
-      $target.closest('button', event.currentTarget).length > 0 ||
-      $target.closest('a', event.currentTarget).length > 0;
+      $target.tagName === 'A' ||
+      $target.tagName === 'BUTTON' ||
+      $target.closest('button') ||
+      $target.closest('a');
     if (!isAnchorOrButton) {
       const params = this.get('params');
       const queryParams = this.get('queryParams');
