@@ -4,7 +4,6 @@ type CacheType int
 
 const (
 	NotInitialized CacheType = iota
-	NotImplemented
 	SyncMap
 	LRU
 )

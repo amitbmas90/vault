@@ -2,7 +2,6 @@ package transit
 
 import (
 	"context"
-	"errors"
 	"strings"
 
 	"github.com/hashicorp/vault/helper/keysutil"
@@ -71,26 +70,23 @@ type backend struct {
 
 // initializeCache initializes a transit's cache
 func (b *backend) initializeCache(ctx context.Context, s logical.Storage) error {
-	// check storage
-	entry, _ := s.Get(ctx, "config/cache-type")
-	if entry == nil {
-		// if nothing is in storage, default to a syncmap
+	// default to an unlimited cache size
+	targetSize := 0
+	// override default size with a stored size value if one is available
+	if entry, _ := s.Get(ctx, "config/cache-size"); entry != nil {
+		var storedCacheSize configCacheSize
+		if err := entry.DecodeJSON(&storedCacheSize); err != nil {
+			return err
+		}
+		targetSize = storedCacheSize.Size
+	}
+
+	// create the appropriate cache
+	if targetSize == 0 {
 		b.lm.ConvertCacheToSyncmap()
 		return nil
-	}
-	// otherwise use stored values
-	var storedCacheType configCacheType
-	if err := entry.DecodeJSON(&storedCacheType); err != nil {
-		return err
-	}
-	switch storedCacheType.CacheType {
-	case keysutil.SyncMap:
-		b.lm.ConvertCacheToSyncmap()
-		return nil
-	case keysutil.LRU:
-		return b.lm.ConvertCacheToLRU(storedCacheType.Size)
-	default:
-		return errors.New("The stored cache-type is not recognized")
+	} else {
+		return b.lm.ConvertCacheToLRU(targetSize)
 	}
 }
 
