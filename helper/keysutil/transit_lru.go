@@ -24,10 +24,6 @@ func (c *TransitLRU) Store(key, value interface{}) {
 	c.lru.Add(key, value)
 }
 
-func (c *TransitLRU) Len() int {
-	return c.lru.Len()
-}
-
 func (c *TransitLRU) Size() int {
 	return c.size
 }
