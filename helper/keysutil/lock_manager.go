@@ -68,6 +68,7 @@ func NewLockManager(cacheDisabled bool) *LockManager {
 		keyLocks:  locksutil.CreateLocks(),
 		lock:      sync.RWMutex{},
 	}
+	lm.ConvertCacheToSyncmap()
 	return lm
 }
 

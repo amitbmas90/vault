@@ -22,21 +22,18 @@ func (b *backend) pathCacheConfig() *framework.Path {
 
 		Operations: map[logical.Operation]framework.OperationHandler{
 			logical.ReadOperation: &framework.PathOperation{
-				Callback:    b.pathCacheConfigRead,
-				Summary:     "Returns the size of the active cache",
-				Description: "",
+				Callback: b.pathCacheConfigRead,
+				Summary:  "Returns the size of the active cache",
 			},
 
 			logical.UpdateOperation: &framework.PathOperation{
-				Callback:    b.pathCacheConfigWrite,
-				Summary:     "Configures a new cache of the specified size",
-				Description: "",
+				Callback: b.pathCacheConfigWrite,
+				Summary:  "Configures a new cache of the specified size",
 			},
 
 			logical.CreateOperation: &framework.PathOperation{
-				Callback:    b.pathCacheConfigWrite,
-				Summary:     "Configures a new cache of the specified size",
-				Description: "",
+				Callback: b.pathCacheConfigWrite,
+				Summary:  "Configures a new cache of the specified size",
 			},
 		},
 
